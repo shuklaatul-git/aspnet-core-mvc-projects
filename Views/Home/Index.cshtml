@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Home Page index.html";
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>@ViewBag.Title</title>
+    <script>
+        function openPopup() {
+            const param1 = 'value1';
+            const param2 = 'value2';
+            const url = `/Home/Popup?param1=${encodeURIComponent(param1)}&param2=${encodeURIComponent(param2)}`;
+            window.open(url, 'popup', 'width=600,height=400');
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Main View</h1>
+    <button onclick="openPopup()">Open Pop-up</button>
+</body>
+
+</html>
