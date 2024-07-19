@@ -13,8 +13,10 @@ public class HomeController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string param1, string param2)
     {
+        ViewBag.Param1 = param1;
+        ViewBag.Param2 = param2;
         return View();
     }
 
@@ -23,12 +25,12 @@ public class HomeController : Controller
         return View();
     }
 
-     public IActionResult Popup(string param1, string param2)
-        {
-            ViewBag.Param1 = param1;
-            ViewBag.Param2 = param2;
-            return View();
-        }
+    public IActionResult Popup(string param1, string param2)
+    {
+        ViewBag.Param1 = param1;
+        ViewBag.Param2 = param2;
+        return View();
+    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

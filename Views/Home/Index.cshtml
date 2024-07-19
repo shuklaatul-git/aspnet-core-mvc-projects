@@ -1,25 +1,111 @@
 ﻿@{
-    ViewBag.Title = "Home Page index.html";
+    ViewData["Title"] = "Home Page";
 }
 
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>@ViewBag.Title</title>
-    <script>
-        function openPopup() {
-            const param1 = 'value1';
-            const param2 = 'value2';
-            const url = `/Home/Popup?param1=${encodeURIComponent(param1)}&param2=${encodeURIComponent(param2)}`;
-            window.open(url, 'popup', 'width=600,height=400');
+    <title>@ViewData["Title"]</title>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
         }
-    </script>
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            height: 80%;
+            overflow: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #angularAppContainer {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Main View</h1>
-    <button onclick="openPopup()">Open Pop-up</button>
+
+    <h2>Home Page</h2>
+
+    <!-- Button to open the modal -->
+    <button onclick="openModal('firstVal','secondVal')">Open Modal</button>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <!-- Container for Angular application -->
+            <div id="angularAppContainer"></div>
+        </div>
+    </div>
+
+    <!-- Include Angular scripts -->
+    <script src="~/dist/runtime.be755858c66604d9.js"></script>
+    <script src="~/dist/polyfills.37d6495033fc876d.js"></script>
+    <script src="~/dist/main.389ab0fff555687b.js"></script>
+
+    <script>
+        function openModal(param1, param2) {
+            var modal = document.getElementById("myModal");
+            modal.style.display = "block";
+            loadAngularApp(param1, param2);
+        }
+
+        function closeModal() {
+            var modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        }
+
+        function loadAngularApp(param1, param2) {
+            document.getElementById('angularAppContainer').innerHTML = '<app-root></app-root>';
+            if (typeof window.bootstrapAngularApp === 'function') {
+                window.bootstrapAngularApp();
+                // Navigate to the specific route for the modal component
+                setTimeout(() => {
+                    const angularRoot = document.querySelector('app-root');
+                    const baseHref = angularRoot.getAttribute('ng-reflect-base-href') || '/';
+                    window.history.pushState({}, '', baseHref + 'modal?param1=' + param1 + '&param2=' + param2);
+                    const event = new PopStateEvent('popstate');
+                    window.dispatchEvent(event);
+                }, 0);
+            } else {
+                console.error('Angular bootstrap function not found.');
+            }
+        }
+    </script>
+
 </body>
 
 </html>
